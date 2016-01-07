@@ -45,16 +45,34 @@ shinyServer(function(input, output, session) {
                           output=input$selectTab)
   }) #table
   
+   mypallette <- reactive({
+     py <- c(ifelse(is.null(input$color1),"lightblue3", input$color1),
+             ifelse(is.null(input$color2),"navy", input$color2))
+             
+   })
+   myaxisl <- reactive({
+     axisl <- c(ifelse(is.null(input$xaxisl),"", input$xaxisl),
+             ifelse(is.null(input$yaxisl),"", input$yaxisl))
+             
+   })
   
-  output$myPlot <- renderPlot({
-  library(evalwaterfallr)
-    mygiven <- mygiven()
-
-    waterfallPlot(waterfallPrep(myparams(), 
-                                           mygiven$value[1],
-                                           mygiven$value[2],
-                                           mygiven$value[3],
-                          output=input$selectTab))
+   output$myPlot <- renderPlot({
+     library(evalwaterfallr)
+     mygiven <- mygiven()
+     mypallette <- mypallette() # user-defined or default
+     myaxisl <- myaxisl() # user-defined or default
+     waterfallPlot(
+       waterfallPrep(
+         myparams(),
+         mygiven$value[1],
+         mygiven$value[2],
+         mygiven$value[3],
+         output = input$selectTab
+       ),
+       palette = mypallette,
+       xlab = myaxisl[1],
+       ylab = myaxisl[2]
+     )
 
   }) # distPlot
 
