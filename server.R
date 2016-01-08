@@ -7,9 +7,10 @@
 ## Uncomment the next line to install devtools and shiny if needed
 #install.packages(c("devtools","shiny"))
 library(devtools)
-install_github("EMIjess/evalwaterfallr") # requires this package
+install_github("EMIjess/evalwaterfallr",
+               options(download.file.method = "libcurl")) # requires this package
 library(shiny)
-
+`%then%` <- shiny:::`%OR%`
 shinyServer(function(input, output, session) {
   mym <- reactive({ # number of parameters
      m <- ifelse(is.null(input$nparams),1, input$nparams)
@@ -17,6 +18,14 @@ shinyServer(function(input, output, session) {
 
   myparams <- reactive({
     mycutoff <- max(1, mym(), na.rm=TRUE) #never less than 1
+    validate(
+      need(input$p1value >=0, 'Parameters cannot be negative.') %then%
+      need(input$p2value >=0, 'Parameters cannot be negative.') %then%
+      need(input$p3value >=0, 'Parameters cannot be negative.') %then%
+      need(input$p4value >=0, 'Parameters cannot be negative.') %then%
+      need(input$p5value >=0, 'Parameters cannot be negative.') %then%
+      need(input$p6value >=0, 'Parameters cannot be negative.') 
+    )
       df <- data.frame(
         param.names = c(input$p1name, input$p2name, input$p3name, 
                    input$p4name, input$p5name, input$p6name),
@@ -34,8 +43,8 @@ shinyServer(function(input, output, session) {
         stringsAsFactors=FALSE)
 }) #mygiven
   
-  
-   output$table <- renderTable({
+   #calculate the table
+   mytable <- reactive({
     library(evalwaterfallr)
     mygiven <- mygiven()
     mytab <- evalwaterfallr::waterfallPrep(myparams(), 
@@ -44,6 +53,10 @@ shinyServer(function(input, output, session) {
                                            mygiven$value[3],
                           output=input$selectTab)
   }) #table
+   
+   output$table <- renderTable({ #print the table
+     mytable()[c("variable","total","base","decrease","increase")]}, 
+    include.rownames=FALSE)
   
    mypallette <- reactive({
      py <- c(ifelse(is.null(input$color1),"lightblue3", input$color1),
