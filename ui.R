@@ -90,23 +90,27 @@ shinyUI(
     )
   ), # end impact parameter row
   fluidRow(
-    h4("Plot Adjustments",
+    h4("Adjustments",
        style = "text-align: left; padding: 0px 10px"),
-    p("The plot and table update with each change to the key values or impact parameters above. Minor adjustments to the plot visualization can be made here. Scroll down to see the output plot and table.",
+    p(" Minor adjustments to the plot visualization can be made here. Scroll down to see the output plot and table.",
       style = "color: #808080; text-align: left; padding: 0px 10px"),
+    
+    
     column(4,
-           textInput("xaxisl","X axis Title",""),
-           textInput("yaxisl","Y axis Title","")
-    ),
-    column(4,
-           radioButtons("selectTab", "View:", 
+           radioButtons("selectTab", "Plot & Table View:", 
                         c("No Permutation" = "none",
                           "Gross Permutation" = "gross",
                           "Net Permutation" = "net"), 
                         selected = "gross", inline = FALSE, width = NULL
            ), # end select input
-           p(style="font-size:80%; color: #808080", em("Gross Permutation")," is Gross Ex Ante, Parameters, Gross Ex Post, Net Ex Post",em("Net Permutation"),"is Gross Ex Ante, Net Ex Ante, Parameters, Net Ex Post")
-    ), # plot column
+           p(style="font-size:80%; color: #808080", em("Gross Permutation")," is Gross Ex Ante, Parameters, Gross Ex Post, Net Ex Post",em("Net Permutation"),"is Gross Ex Ante, Net Ex Ante, Parameters, Net Ex Post."),
+           actionButton("button","Update Table & Plot")
+    ), # permutation column
+    column(4,
+           textInput("xaxisl","X axis Title",""),
+           textInput("yaxisl","Y axis Title","")
+           
+    ),
     column(4,
            selectInput("color1","Decrease Color:",
                        c("l. blue" = "lightblue3",
@@ -122,22 +126,29 @@ shinyUI(
     )),
   hr(),
   # Here is the start of the output
-  h4("The Waterfall Plot",
-       style = "text-align: left; padding: 0px 10px"),
-  fluidRow(plotOutput("myPlot")),
-  hr(),
-  h4("The Permutation Table",
-       style = "text-align: left; padding: 0px 10px"),
   fluidRow(
-    column(3,
-           p("This table can be copied and pasted into Excel or another software tool if you prefer to make your plots there."),
-           p("The ", a("emiwaterfallr package on GitHub", href="https://github.com/EMIjess/evalwaterfallr.git")," allows more control over the plot than this application."),
-           p("If you use this application for your evaluation efforts, please give us credit, like so: 'This table/plot was produced with the evalwaterfallr package developed by EMI Consulting and PG&E.'")
+    
+    column(4,
+          h4(htmlOutput("tblcaption"),
+          #h5("The Permutation Table",
+          style = "text-align: left; padding: 0px 10px"),
+          tableOutput("table"),
+          p("This table can be copied and pasted into Excel or another software tool if you prefer to make your plots there.", 
+            style="font-size:80%; color: #808080")#output
+          ),
+    column(8,
+           h4(htmlOutput("figcaption"),
+          #h5("The Waterfall Plot",
+          style = "text-align: left; padding: 0px 10px"),
+          plotOutput("myPlot"), #output
+          p("The ", a("emiwaterfallr package on GitHub", href="https://github.com/EMIjess/evalwaterfallr.git")," allows more control over the plot than this application.", 
+            style="font-size:80%; color: #808080")
+          )
     ),
-    column(9,
-           tableOutput("table")
-    )),
-  
+
+  hr(),
+ 
+
   # Here is the start of the credits
   hr(),
   fluidRow(
@@ -145,7 +156,7 @@ shinyUI(
            img(src='emilogo.jpg', align = "right",height=140,width=200)
     ),
     column(9,
-           p("This application was developed by ", a("EMI Consulting", href="http://emiconsulting.com"), "in collaboration with PG&E."),
+           p("This application was developed by ", a("EMI Consulting", href="http://emiconsulting.com"), "in collaboration with PG&E.",em("If you use this application for your evaluation efforts, please give us credit, like so: 'This table/plot was produced with the evalwaterfallr package developed by EMI Consulting and PG&E.'")),
            p("For full reference, please see the ", a("emiwaterfallr package on GitHub", href="https://github.com/EMIjess/evalwaterfallr.git")), 
            p("For more information on the motivation for this package, see Kasman, Robert, Adam Scheer, Rachel Sackman, Rafael Friedmann, and Janice Berman. 2015. “Development of Order-Independent Waterfall Graphics to Enable Comprehensive Understanding of Impact Evaluation Results.” Proceedings of the 2015 International Energy Program Evaluation Conference", a("at the IEPEC proceedings website.", href="http://www.iepec.org/wp-content/uploads/2015/papers/022.pdf")))
   ) # end of credits
