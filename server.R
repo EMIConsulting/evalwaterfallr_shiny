@@ -5,11 +5,18 @@
 # http://shiny.rstudio.com
 #
 ## Uncomment the next line to install devtools and shiny if needed
-#install.packages(c("devtools","shiny"))
-library(devtools)
+if(!require(devtools)){
+    install.packages("devtools")
+    library(devtools)
+}
 install_github("EMIjess/evalwaterfallr",
                options(download.file.method = "libcurl")) # requires this package
-library(shiny)
+
+if(!require(shiny)){
+    install.packages("shiny")
+    library(shiny)
+}
+
 `%then%` <- shiny:::`%OR%`
 shinyServer(function(input, output, session) {
   mym <- reactive({ # number of parameters

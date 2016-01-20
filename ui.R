@@ -1,5 +1,8 @@
 
-library(shiny)
+if(!require(shiny)){
+    install.packages("shiny")
+    library(shiny)
+}
 
 
 shinyUI(
