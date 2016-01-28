@@ -26,7 +26,7 @@ shinyUI(
       column(4,
              numericInput("ntg.xa", "NTG Reported", 1,
                           min=0, max=2, step=.1), # ntg.xa
-             p(style="font-size:60%; color: #808080","): The fraction of the ex ante gross savings that is predicted to occur due to program influence. The function defaults to 1.")),
+             p(style="font-size:60%; color: #808080","The fraction of the ex ante gross savings that is predicted to occur due to program influence. The function defaults to 1.")),
       column(4,
              numericInput("ntg.xp", "NTG Evaluated", 1,
                           min=0, max=2, step=.1), # ntg.xp
