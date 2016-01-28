@@ -1,8 +1,9 @@
 
-if(!require(shiny)){
-    install.packages("shiny")
-    library(shiny)
-}
+# if(!require(shiny)){
+#     install.packages("shiny")
+#     library(shiny)
+# }
+
 
 
 shinyUI(
@@ -21,15 +22,15 @@ shinyUI(
       column(4,
              numericInput("gross.xa","Gross Reported",100,
                           min=0), # gross.xa
-             p(style="font-size:60%; color: #808080","The Gross Reported value is the starting or planning value.")),
+             p(style="font-size:60%; color: #808080","The Gross Reported value is equivalent to Ex Ante Gross savings.")),
       column(4,
              numericInput("ntg.xa", "NTG Reported", 1,
                           min=0, max=2, step=.1), # ntg.xa
-             p(style="font-size:60%; color: #808080","The NTG Reported value is the fraction of the total starting value that remains after some expected losses (net starting value), this is the planning fraction. If you assume that the losses are 10%, the NTG reported is 0.9. The function defaults to 1, or no assumed losses or gains.")),
+             p(style="font-size:60%; color: #808080","): The fraction of the ex ante gross savings that is predicted to occur due to program influence. The function defaults to 1.")),
       column(4,
              numericInput("ntg.xp", "NTG Evaluated", 1,
                           min=0, max=2, step=.1), # ntg.xp
-             p(style="font-size:60%; color: #808080","The NTG Evaluted value is the fraction of the total ending value that remains after calculated losses (net ending value), this is the known fraction. If you find that the losses are 20%, the NTG Evaluated is 0.8. The function defaults to 1, or no assumed losses or gains."))
+             p(style="font-size:60%; color: #808080","The fraction of the gross savings that are found by evaluation to occur due to program influence. The function defaults to 1,."))
     ), # key values row
     
     # Now for impact parameters
