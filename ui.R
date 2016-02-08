@@ -30,7 +30,7 @@ shinyUI(
       column(4,
              numericInput("ntg.xp", "NTG Evaluated", 1,
                           min=0, max=2, step=.1), # ntg.xp
-             p(style="font-size:60%; color: #808080","The fraction of the gross savings that are found by evaluation to occur due to program influence. The function defaults to 1,."))
+             p(style="font-size:60%; color: #808080","The fraction of the gross savings that are found by evaluation to occur due to program influence. The function defaults to 1."))
     ), # key values row
     
     # Now for impact parameters
@@ -47,7 +47,7 @@ shinyUI(
         value = 4)),
       column(7,
       p(style="font-size:80%; color: #808080","This controls the number of impact parameters that will be permuted. Typically, there will be 3 or 4. The evalwaterfallr package can handle up to 10. This application can handle up to 6."),
-      p(style="font-size:80%; color: #808080","Enter the parameter names, like 'ISR' or 'HOU', and their values below. Parameters are expected as realization ratios: (Evaluated Value/Expected Value). For example, a parameter with value 0.7 had evaluated results that were 70% of expected. All parameters default to 1: the evaluated value was the same as expected")
+      p(style="font-size:80%; color: #808080","Enter the parameter names, like 'ISR' or 'HOU', and their values below. Parameters are expected as realization ratios: (Evaluated Value/Expected Value). For example, a parameter with value 0.7 had evaluated results that were 70% of expected. All parameters default to 1: the evaluated value was the same as expected.")
       )),
   fluidRow(
     column(2,
