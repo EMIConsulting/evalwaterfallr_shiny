@@ -111,6 +111,11 @@ shinyUI(
            actionButton("button","Update Table & Plot")
     ), # permutation column
     column(4,
+           textInput("figcaption_self","Rename Figure Caption",""),
+           textInput("tblcaption_self","Rename Table Caption",""),
+           
+    #),
+    #column(4,
            textInput("xaxisl","X axis Title",""),
            textInput("yaxisl","Y axis Title","")
            
@@ -131,26 +136,51 @@ shinyUI(
   hr(),
   # Here is the start of the output
   fluidRow(
-    
-    column(4,
-          h4(htmlOutput("tblcaption"),
-          #h5("The Permutation Table",
-          style = "text-align: left; padding: 0px 10px"),
-          tableOutput("table"),
-          p("This table can be copied and pasted into Excel or another software tool if you prefer to make your plots there.", 
-            style="font-size:80%; color: #808080")#output
-          ),
-    column(8,
-           h4(htmlOutput("figcaption"),
-          #h5("The Waterfall Plot",
-          style = "text-align: left; padding: 0px 10px"),
-          plotOutput("myPlot"), #output
+    h3(htmlOutput("figcaption"),
+              style = "text-align: left; padding: 0px 10px"),
+    column(2,
+          
+          p("Total values are shown as grey bars.",
+            style="font-size:80%; color: #808080; padding: 20px 0px 0px 0px"),
+          p("Parameter and net impacts are shown as colored waterfall bars, increasing or decreasing. There are color options above",
+            style="font-size:80%; color: #808080"),
           p("The ", a("emiwaterfallr package on GitHub", href="https://github.com/EMIjess/evalwaterfallr.git")," allows more control over the plot than this application.", 
-            style="font-size:80%; color: #808080")
+            style="font-size:80%; color: #808080; padding: 20px 0px")
+          ),
+    column(10,
+          h4(htmlOutput("figcaption_self"),
+              style = "text-align: left; padding: 0px 10px"),
+          plotOutput("myPlot") #output
+          
           )
     ),
+    hr(), # a ruled line between the figure and table
+  fluidRow(
+    h3(htmlOutput("tblcaption"),
+             style = "text-align: left; padding: 0px 10px"),
+    column(3,
+          
+          p(em("Variable: "), " The name of the variable",
+            style="font-size:80%; color: #808080; padding: 20px 0px 0px 0px"),
+          p(em("Total: "), " The value of the variable",
+            style="font-size:80%; color: #808080"),
+          p(em("Impact Parameter: "), " The given value of the parameter",
+            style="font-size:80%; color: #808080"),
+          p(em("Change: "), " The impact of the parameter",
+            style="font-size:80%; color: #808080"),
+          h5("This table can be copied and pasted into Excel or another software tool if you prefer to make your plots there.", 
+            style="font-size:80%; color: #808080; 
+            text-align: left; padding: 20px 0px")
+          ),
+    column(6,
+          h4(htmlOutput("tblcaption_self"),
+          style = "text-align: left; padding: 0px 10px"),
+          tableOutput("table") #output
+    ),
+    column(3) 
+          ),
 
-  hr(),
+
  
 
   # Here is the start of the credits

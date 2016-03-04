@@ -62,6 +62,29 @@ shinyServer(function(input, output, session) {
                                            mygiven$value[2],
                                            mygiven$value[3],
                                            output=input$selectTab)
+    # function that capitalizes
+    capwords <- function(s, strict = FALSE) {
+      cap <- function(s) paste(toupper(substring(s, 1, 1)),
+                               {s <- substring(s, 2); if(strict) tolower(s) else s},
+                               sep = "", collapse = " " )
+      sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
+    }
+    colnames(mytab) <- capwords(colnames(mytab))
+    mytab$Given[mytab$Given==mytab$Total] <- ""
+    colnames(mytab)[colnames(mytab) == 'Given'] <- 'Impact Parameter'
+    mytab$Change <- ifelse(is.na(mytab$Decrease), 0,
+                           ifelse(mytab$Decrease > 0, mytab$Decrease*(-1), 
+                                  mytab$Increase)) #blank or neg or increase
+    customRound <- function(value){
+      mydigits <- ifelse(abs(value) <= 1, 2, # less than 1, 2 digits
+                     ifelse(abs(value) <= 10, 1,
+                            0)) # more than 10, no digits
+      round(value, digits = mydigits)
+    }
+    
+    mytab$Change <- customRound(mytab$Change) # round the Change value
+    mytab$Change[mytab$Change==0] <- ""
+    mytab <- mytab[c("Variable","Total","Impact Parameter","Change")]
   }) #table
   
   # make the titles
@@ -74,8 +97,8 @@ shinyServer(function(input, output, session) {
   })
   figcaption<- eventReactive(input$button,{
     figcaption <- ifelse(input$selectTab=="none", "Given Values Plot",
-                         ifelse(input$selectTab=="gross", "Gross Waterfall",
-                                ifelse(input$selectTab=="net", "Net Waterfall",
+                         ifelse(input$selectTab=="gross", "Gross Permutation Plot",
+                                ifelse(input$selectTab=="net", "Net Permutation Plot",
                                        "Figure"))) 
   })
   output$tblcaption <- renderUI({ 
@@ -84,9 +107,15 @@ shinyServer(function(input, output, session) {
   output$figcaption <- renderUI({ 
     HTML(figcaption())
   })
+  output$tblcaption_self <- renderUI({ 
+    HTML(input$tblcaption_self)
+  })
+  output$figcaption_self <- renderUI({ 
+    HTML(input$figcaption_self)
+  })
   
   output$table <- renderTable({ #print the table
-    mytable()[c("variable","total","base","decrease","increase")]}, 
+    mytable()}, 
     include.rownames=FALSE)
   
   mypallette <- reactive({
@@ -117,7 +146,8 @@ shinyServer(function(input, output, session) {
       ),
       palette = mypallette,
       xlab = myaxisl[1],
-      ylab = myaxisl[2]
+      ylab = myaxisl[2],
+      xtextangle = 0
     ) 
   })
   output$myPlot <- renderPlot({
