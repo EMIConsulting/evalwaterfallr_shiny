@@ -111,8 +111,8 @@ shinyUI(
            actionButton("button","Update Table & Plot")
     ), # permutation column
     column(4,
-           textInput("figcaption_self","Rename Figure Caption",""),
-           textInput("tblcaption_self","Rename Table Caption",""),
+           textInput("figcaption_self","Rename Figure Title",""),
+           textInput("tblcaption_self","Rename Table Title",""),
            
     #),
     #column(4,
@@ -135,51 +135,53 @@ shinyUI(
     )),
   hr(),
   # Here is the start of the output
-  fluidRow(
-    h3(htmlOutput("figcaption"),
-              style = "text-align: left; padding: 0px 10px"),
-    column(2,
-          
-          p("Total values are shown as grey bars.",
-            style="font-size:80%; color: #808080; padding: 20px 0px 0px 0px"),
-          p("Parameter and net impacts are shown as colored waterfall bars, increasing or decreasing. There are color options above",
-            style="font-size:80%; color: #808080"),
-          p("The ", a("emiwaterfallr package on GitHub", href="https://github.com/EMIjess/evalwaterfallr.git")," allows more control over the plot than this application.", 
-            style="font-size:80%; color: #808080; padding: 20px 0px")
-          ),
-    column(10,
-          h4(htmlOutput("figcaption_self"),
-              style = "text-align: left; padding: 0px 10px"),
-          plotOutput("myPlot") #output
-          
-          )
+  conditionalPanel( # only show output if there is something input
+    condition = "input.button == true",
+    fluidRow(
+      h3(htmlOutput("mycaption"), #over whole output caption
+         style = "text-align: left; padding: 0px 10px"),
+      column(2,
+             
+             p("Total values are shown as grey bars.",
+               style="font-size:80%; color: #808080; padding: 20px 0px 0px 0px"),
+             p("Parameter and net impacts are shown as colored waterfall bars, increasing or decreasing. There are color options above",
+               style="font-size:80%; color: #808080"),
+             p("The ", a("emiwaterfallr package on GitHub", href="https://github.com/EMIjess/evalwaterfallr.git")," allows more control over the plot than this application.", 
+               style="font-size:80%; color: #808080; padding: 20px 0px")
+      ),
+      column(10,
+             h4(htmlOutput("figcaption_self"),
+                style = "text-align: center; padding: 0px 10px"),
+             plotOutput("myPlot") #output
+             
+      )
     ),
     hr(), # a ruled line between the figure and table
-  fluidRow(
-    h3(htmlOutput("tblcaption"),
-             style = "text-align: left; padding: 0px 10px"),
-    column(3,
-          
-          p(em("Variable: "), " The name of the variable",
-            style="font-size:80%; color: #808080; padding: 20px 0px 0px 0px"),
-          p(em("Total: "), " The value of the variable",
-            style="font-size:80%; color: #808080"),
-          p(em("Impact Parameter: "), " The given value of the parameter",
-            style="font-size:80%; color: #808080"),
-          p(em("Change: "), " The impact of the parameter",
-            style="font-size:80%; color: #808080"),
-          h5("This table can be copied and pasted into Excel or another software tool if you prefer to make your plots there.", 
-            style="font-size:80%; color: #808080; 
+    fluidRow(
+      h3(htmlOutput("tblcaption"),
+         style = "text-align: left; padding: 0px 10px"),
+      column(3,
+             
+             p(em("Variable: "), " The name of the variable",
+               style="font-size:80%; color: #808080; padding: 20px 0px 0px 0px"),
+             p(em("Total: "), " The value of the variable",
+               style="font-size:80%; color: #808080"),
+             p(em("Impact Parameter: "), " The given value of the parameter",
+               style="font-size:80%; color: #808080"),
+             p(em("Change: "), " The impact of the parameter",
+               style="font-size:80%; color: #808080"),
+             h5("This table can be copied and pasted into Excel or another software tool if you prefer to make your plots there.", 
+                style="font-size:80%; color: #808080; 
             text-align: left; padding: 20px 0px")
-          ),
-    column(6,
-          h4(htmlOutput("tblcaption_self"),
-          style = "text-align: left; padding: 0px 10px"),
-          tableOutput("table") #output
-    ),
-    column(3) 
-          ),
-
+      ),
+      column(6,
+             h4(htmlOutput("tblcaption_self"),
+                style = "text-align: left; padding: 0px 10px"),
+             tableOutput("table") #output
+      ),
+      column(3) 
+    ) # end of XL table output
+  ), # end of conditionalPanel() for output
 
  
 

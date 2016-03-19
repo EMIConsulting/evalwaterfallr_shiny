@@ -84,29 +84,25 @@ shinyServer(function(input, output, session) {
     
     mytab$Change <- customRound(mytab$Change) # round the Change value
     mytab$Change[mytab$Change==0] <- ""
-    mytab <- mytab[c("Variable","Total","Impact Parameter","Change")]
+    mytab1 <- mytab[c("Variable","Total","Impact Parameter","Change")]
+    mytabXL <- mytab[c("Variable","Total","Base","Decrease","Increase")]
+    x <- list(mytab1, mytabXL)
+    return(x)
   }) #table
   
   # make the titles
-  tblcaption <- eventReactive(input$button,{
+  mycaption <- eventReactive(input$button,{
     
-    tblcaption <- ifelse(input$selectTab=="none", "Given Values Table",
-                         ifelse(input$selectTab=="gross", "Gross Permutation Table",
-                                ifelse(input$selectTab=="net", "Net Permutation Table",
+    mycaption <- ifelse(input$selectTab=="none", "Given Values Table and Figure",
+                         ifelse(input$selectTab=="gross", "Gross Permutation Table and Figure",
+                                ifelse(input$selectTab=="net", "Net Permutation Table and Figure",
                                        "Table")))
   })
-  figcaption<- eventReactive(input$button,{
-    figcaption <- ifelse(input$selectTab=="none", "Given Values Plot",
-                         ifelse(input$selectTab=="gross", "Gross Permutation Plot",
-                                ifelse(input$selectTab=="net", "Net Permutation Plot",
-                                       "Figure"))) 
+  
+  output$mycaption <- renderUI({ 
+    HTML(mycaption()) 
   })
-  output$tblcaption <- renderUI({ 
-    HTML(tblcaption())
-  })
-  output$figcaption <- renderUI({ 
-    HTML(figcaption())
-  })
+  
   output$tblcaption_self <- renderUI({ 
     HTML(input$tblcaption_self)
   })
@@ -115,7 +111,11 @@ shinyServer(function(input, output, session) {
   })
   
   output$table <- renderTable({ #print the table
-    mytable()}, 
+    mytable[1]()}, 
+    include.rownames=FALSE)
+  
+  output$XLtable <- renderTable({ #print the table
+    mytable[2]()}, 
     include.rownames=FALSE)
   
   mypallette <- reactive({
