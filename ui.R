@@ -14,7 +14,6 @@ shinyUI(
       p("This application creates a waterfall table and plot for viewing impact evaluation results, specifically with energy efficiency savings programs in mind.",
         style = "color: #808080; text-align: left; padding: 0px 10px")
     ),
-    
     # first we need key values
     fluidRow(
       h4("What are Your Key Values?",
@@ -135,33 +134,46 @@ shinyUI(
     )),
   hr(),
   # Here is the start of the output
-  conditionalPanel( # only show output if there is something input
-    condition = "input.button == true",
+  #conditionalPanel( # only show output if there is something input
+   # condition = "input.button == true",
     fluidRow(
       h3(htmlOutput("mycaption"), #over whole output caption
-         style = "text-align: left; padding: 0px 10px"),
-      column(2,
-             
-             p("Total values are shown as grey bars.",
-               style="font-size:80%; color: #808080; padding: 20px 0px 0px 0px"),
-             p("Parameter and net impacts are shown as colored waterfall bars, increasing or decreasing. There are color options above",
+         style = "text-align: left; padding: 0px 10px")
+      ), # end of caption row
+    fluidRow(
+      column(3, # this is where the output table goes
+           h4(htmlOutput("tblcaption_self"), # user input title
+                style = "text-align: center; padding: 0px 10px"),
+           tableOutput("table"), #output  
+           p(strong("Table Notes: "),
+               style="font-size:85%; color: #808080; padding: 20px 0px 0px 0px"), 
+           p(em("Variable: "), " The name of the variable",
                style="font-size:80%; color: #808080"),
-             p("The ", a("emiwaterfallr package on GitHub", href="https://github.com/EMIjess/evalwaterfallr.git")," allows more control over the plot than this application.", 
-               style="font-size:80%; color: #808080; padding: 20px 0px")
-      ),
-      column(10,
+             p(em("Total: "), " The value of the variable",
+               style="font-size:80%; color: #808080"),
+             p(em("Impact Parameter: "), " The given value of the parameter",
+               style="font-size:80%; color: #808080"),
+             p(em("Change: "), " The impact of the parameter",
+               style="font-size:80%; color: #808080")
+      ), # end of table column
+      column(9, # this is where the output plot goes
              h4(htmlOutput("figcaption_self"),
                 style = "text-align: center; padding: 0px 10px"),
-             plotOutput("myPlot") #output
+             plotOutput("myPlot"), # fig output
+             # put the notes under the figure
+             p(strong("Figure Notes: "),em("Total values")," are shown as grey bars. ",em("Parameter and net impacts")," are shown as colored waterfall bars, increasing or decreasing; there are color options above. The ", a("emiwaterfallr package on GitHub", href="https://github.com/EMIjess/evalwaterfallr.git")," allows more control over the plot than this application.", 
+               style="font-size:80%; color: #808080; padding: 0px 20px")
              
-      )
-    ),
-    hr(), # a ruled line between the figure and table
+      ) # end of figure column
+    ), # end of table/figure viewable output row
+    hr(), # a ruled line between the figure and excel table
+  
     fluidRow(
-      h3(htmlOutput("tblcaption"),
+      h3("Table for use outside of this application",
          style = "text-align: left; padding: 0px 10px"),
-      column(3,
-             
+     
+      column(5,
+             downloadButton('downloadData', 'Download as .csv'),
              p(em("Variable: "), " The name of the variable",
                style="font-size:80%; color: #808080; padding: 20px 0px 0px 0px"),
              p(em("Total: "), " The value of the variable",
@@ -169,19 +181,15 @@ shinyUI(
              p(em("Impact Parameter: "), " The given value of the parameter",
                style="font-size:80%; color: #808080"),
              p(em("Change: "), " The impact of the parameter",
-               style="font-size:80%; color: #808080"),
-             h5("This table can be copied and pasted into Excel or another software tool if you prefer to make your plots there.", 
-                style="font-size:80%; color: #808080; 
-            text-align: left; padding: 20px 0px")
+               style="font-size:80%; color: #808080")
+             
       ),
       column(6,
-             h4(htmlOutput("tblcaption_self"),
-                style = "text-align: left; padding: 0px 10px"),
-             tableOutput("table") #output
+             tableOutput("XLtable") #output 
       ),
-      column(3) 
-    ) # end of XL table output
-  ), # end of conditionalPanel() for output
+      column(1) 
+    ), # end of XL table output
+  #), # end of conditionalPanel() for output
 
  
 

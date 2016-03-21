@@ -84,11 +84,15 @@ shinyServer(function(input, output, session) {
     
     mytab$Change <- customRound(mytab$Change) # round the Change value
     mytab$Change[mytab$Change==0] <- ""
-    mytab1 <- mytab[c("Variable","Total","Impact Parameter","Change")]
-    mytabXL <- mytab[c("Variable","Total","Base","Decrease","Increase")]
-    x <- list(mytab1, mytabXL)
-    return(x)
+    mytab
   }) #table
+  
+  output$downloadData <- downloadHandler(
+    filename = function() { paste(input$selectTab, '.csv', sep='') },
+    content = function(file) {
+      write.csv(mytable(), file)
+    }
+  )
   
   # make the titles
   mycaption <- eventReactive(input$button,{
@@ -111,11 +115,11 @@ shinyServer(function(input, output, session) {
   })
   
   output$table <- renderTable({ #print the table
-    mytable[1]()}, 
+    mytable()[c("Variable","Total","Impact Parameter","Change")]}, 
     include.rownames=FALSE)
   
-  output$XLtable <- renderTable({ #print the table
-    mytable[2]()}, 
+  output$XLtable <- renderTable({ #print the XL table
+    mytable()[c("Variable","Total","Base","Decrease","Increase")]}, 
     include.rownames=FALSE)
   
   mypallette <- reactive({
@@ -147,7 +151,7 @@ shinyServer(function(input, output, session) {
       palette = mypallette,
       xlab = myaxisl[1],
       ylab = myaxisl[2],
-      xtextangle = 0
+      xtextangle = 90
     ) 
   })
   output$myPlot <- renderPlot({
