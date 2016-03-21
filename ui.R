@@ -178,11 +178,12 @@ shinyUI(
                style="font-size:80%; color: #808080; padding: 20px 0px 0px 0px"),
              p(em("Total: "), " The value of the variable",
                style="font-size:80%; color: #808080"),
-             p(em("Impact Parameter: "), " The given value of the parameter",
+             p(em("Base: "), " The lowest value of the bar including this change",
                style="font-size:80%; color: #808080"),
-             p(em("Change: "), " The impact of the parameter",
+             p(em("Decrease: "), " The decrease from this variable",
+               style="font-size:80%; color: #808080"),
+             p(em("Increase: "), " The increase from this variable",
                style="font-size:80%; color: #808080")
-             
       ),
       column(6,
              tableOutput("XLtable") #output 
