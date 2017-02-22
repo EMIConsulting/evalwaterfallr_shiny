@@ -19,6 +19,7 @@ html {
 }
 body {
   margin: 0;
+  color: #003366;
 }
 article,
 aside,
@@ -106,6 +107,8 @@ hr {
           box-sizing: content-box;
   height: 0;
 }
+
+
 pre {
   overflow: auto;
 }
@@ -7173,4 +7176,19 @@ a.list-group-item-danger.active:focus {
 }
 .popover {
   color: #555555;
+}
+
+/* my edits */
+.evalguidancetitle {
+  background-color: #0099CC;
+  font-size: 1.3em;
+  text-align: center;
+  color:  #ffffff;
+}
+.evalguidancebox {
+  border: 1px solid #0099CC;
+  margin: 2px;
+}
+.evalguidancetext{
+  margin: 2px;
 }

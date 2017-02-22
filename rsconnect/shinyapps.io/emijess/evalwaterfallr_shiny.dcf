@@ -1,7 +1,9 @@
 name: evalwaterfallr_shiny
 account: emijess
 server: shinyapps.io
-appId: 77469
-bundleId: 347253
+appId: 79006
+bundleId: 539209
 url: https://emijess.shinyapps.io/evalwaterfallr_shiny/
-when: 1452499405.32135
+when: 1471990911.65711
+asMultiple: FALSE
+asStatic: FALSE
