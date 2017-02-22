@@ -24,7 +24,7 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                                        div(
                                          ul(
                                            li("Parameters that are not dependent upon each other."),
-                                           li("Parameters that represent mulitple programs in a portfolio, such as Lighting and Pumps.")
+                                           li("Parameters that represent multiple programs in a portfolio, such as Lighting and Pumps.")
                                          ),
                                          class = "evalguidancetext")
                                        )
@@ -301,7 +301,8 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                                          class = "evalguidancetitle"),
                                        div(
                                          ul(
-                                           li(strong("I'm getting a value error: "), "You may have set negative parameters for a multiplicative permutation. If you are using a multiplicative permutation, the parameters must be at least 0; values of less than 1 reference a lower than reported value."),
+                                           li(strong("I'm getting a value error: "), "You may have set negative parameters for a multiplicative permutation. If you are using a multiplicative permutation, the parameters must be greater than 0; values of less than 1 reference a lower than reported value."),
+                                           li(strong("I'm getting a net evaluated value of zero: "), "If you have a multiplicative parameter that has value 0, the final result is 0. If the reported and evaluated parameter impacts are the same, the parameter value should be 1. The same will occur if either the evaluated NTG or reported NTG are zero."),
                                            li(strong("I'm getting huge values: "), "You may have identified multiplicative when you need additive permutation. Additive parameters are the values that you would add or subtract from the Gross or Net Reported values to get to the Evaluated values."),
                                            li(strong("The page is all disorganized: "), "We may have a browser issue. This application was tested on Chrome. There are known issues with bootstrap renders on Safari and Internet Explorer. Can you try again with another browser?"),
                                            li(strong("I have more than 6 parameters, how can I get a permutation: "), "Because of the time it takes to permute more than 6 parameters (this becomes more than 8 parameters when we consider a hybrid permutation), this application does not include it. You can download the evalwaterfallr package from Github (see link in footer) and work from there. If you have many parameters, you may need to modify the wParamPermute() function and ensure that you are running multiple cores."),
