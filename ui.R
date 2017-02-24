@@ -201,13 +201,17 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                                   div(class = "evalguidancebox",
                                       p(class = "evalguidancetitle", "Impact Parameters"),
                                        div(class = "evalguidancetext",
+                                           fluidRow(
+                                        column(4, 
                                             sliderInput(
                                              "nparams", "How many Impact Parameters do you have?",
                                              min = 2,
                                              max = 6, #reasonable stop
-                                             value = 4),
-                                           p(style="font-size:80%; color: #808080","This controls the number of impact parameters that will be permuted. Typically, there will be 3 or 4. The evalwaterfallr package can handle up to 10. This application can handle up to 6."),
-                                           p(style="font-size:80%; color: #808080","Enter the parameter names, like 'ISR' or 'HOU', and their values below. Additive parameters are gross adjustments. Multiplicative parameters are expected as realization ratios: (Evaluated Value/Expected Value). For example, a parameter with value 0.7 had evaluated results that were 70% of expected. All parameters default to 1."),
+                                             value = 4)
+                                        ),
+                                       column(8,
+                                           p(style="font-size:80%; color: #808080","This controls the number of impact parameters that will be permuted. Typically, there will be 3 or 4. The evalwaterfallr package can handle up to 10. This application can handle up to 6."))),
+                                           p(style="font-size:80%; color: #808080","Enter the parameter names, like 'ISR' or 'HOU', and their values below. All parameters default to 1.", strong("Additive parameters")," are gross adjustments (which can take positive or negative values).", strong("Multiplicative parameters")," are expected as realization ratios: (Evaluated Value/Expected Value). Multiplicative parameters should be greater than zero. For example, a multiplicative parameter with value 0.7 had evaluated results that were 70% of expected."),
   fluidRow(
     column(2,
            textInput("p1name","Param 1 Name","Param 1"),
@@ -262,8 +266,8 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                                        p("You can make further changes to the data and try again (verify the 'Given' column matches what you expect), or you can download all three tables and/or plots: "),
                                        downloadButton('downloadDataTab', 'Download Tables'),
                                        downloadButton('downloadDataFig', 'Download Plots'),
-                                       tableOutput("testtab"),
-                                       tableOutput("testtab2"),
+                                       #tableOutput("testtab"),
+                                       #tableOutput("testtab2"),
                                        verticalLayout( 
                                          div(class = "evalguidancebox",
                                           p(class = "evalguidancetitle", "Gross Permutation Table and Plot"),
