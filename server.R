@@ -38,6 +38,7 @@ shinyServer(function(input, output, session) {
      }else if(input$add_mult == "Multiplicative"){
        type <- "mult"
      }
+    return(type)
   }) #mytype 
   
   myparams <- reactive({
@@ -52,6 +53,7 @@ shinyServer(function(input, output, session) {
     df$values <- as.numeric(df$values) # may look like string
     
     df <- df[c(1:mycutoff),] # limit to the number of parameters
+    return(df)
   }) #myparams
   
   mygiven <- reactive({ # these are the input gross and NTG values or default
@@ -60,6 +62,8 @@ shinyServer(function(input, output, session) {
       variables = c("Gross.XA","NTG.XA","NTG.XP"),
       values = c(input$gross.xa, input$ntg.xa, input$ntg.xp),
       stringsAsFactors=FALSE)
+    tdf$values <- as.numeric(tdf$values) #may look like string
+    return(tdf)
   }) #mygiven
 
 #################
@@ -70,24 +74,26 @@ shinyServer(function(input, output, session) {
   
   mytables <- eventReactive(input$button, {
     library(evalwaterfallr)
+    type <- myaddm()
     mygiven <- mygiven()
-    if(myaddm() == "add"){
-      mytab <- evalwaterfallr::addwaterfallPrep(df = myparams(), 
-                                           gross.report = mygiven$values[1],
-                                           NTG.report = mygiven$values[2],
-                                           NTG.eval = mygiven$values[3]) #get all output
-    }else if(myaddm() == "mult"){
+    if(type == "add"){
+      mytab <- evalwaterfallr::addwaterfallPrep(myparams(), 
+                                           mygiven$values[1],
+                                           mygiven$values[2],
+                                           mygiven$values[3]) #get all output
+    }else if(type == "mult"){
       mytab <- evalwaterfallr::waterfallPrep(myparams(), 
                                            mygiven$values[1],
                                            mygiven$values[2],
                                            mygiven$values[3]) #get all output
-      }
+    }
+    return(mytab) #this is a list of four: none, gross, net, hybrid
   }) 
 
   output$testtab <- renderTable({ #print the table
     myparams()}, 
     include.rownames=FALSE)
-    output$testtab2 <- renderTable({ #print the table
+  output$testtab2 <- renderTable({ #print the table
     mygiven()}, 
     include.rownames=FALSE)
     

@@ -7192,3 +7192,15 @@ a.list-group-item-danger.active:focus {
 .evalguidancetext{
   margin: 2px;
 }
+.evalfooterfoot{
+  clear:both;
+
+  bottom:0;
+}
+.evalfootertext{
+  position:absolute;
+  margin-bottom:5px;
+}
+.myblankspace{
+  margin-top: 3em;
+}

@@ -262,29 +262,30 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                                        p("You can make further changes to the data and try again (verify the 'Given' column matches what you expect), or you can download all three tables and/or plots: "),
                                        downloadButton('downloadDataTab', 'Download Tables'),
                                        downloadButton('downloadDataFig', 'Download Plots'),
-                                       #tableOutput("testtab"),
-                                       #tableOutput("testtab2"),
+                                       tableOutput("testtab"),
+                                       tableOutput("testtab2"),
                                        verticalLayout( 
                                          div(class = "evalguidancebox",
                                           p(class = "evalguidancetitle", "Gross Permutation Table and Plot"),
                                           div(class = "evalguidancetext",
-                                              splitLayout(tableOutput("gross_tab"), 
-                                               plotOutput("myPlotg")))),
+                                              div(splitLayout(tableOutput("gross_tab"), 
+                                               plotOutput("myPlotg"))))),
                                          div(class = "evalguidancebox",
                                           p(class = "evalguidancetitle", "Net Permutation Table and Plot"),
                                           div(class = "evalguidancetext",
-                                              splitLayout(
+                                              div(splitLayout(
                                          tableOutput("net_tab"),
-                                         plotOutput("myPlotn")))),
+                                         plotOutput("myPlotn"))))),
                                          div(class = "evalguidancebox",
                                           p(class = "evalguidancetitle", "Hybrid Permutation Table and Plot"),
                                           div(class = "evalguidancetext",
-                                         tableOutput("hybrid_tab"), #try without split
-                                         plotOutput("myPloth")))
+                                              div(splitLayout(
+                                         tableOutput("hybrid_tab"), 
+                                         plotOutput("myPloth")))))
                                        )
                              )
 
-                    ),
+                    ), # end of output
 
 
 
@@ -301,35 +302,20 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                                          class = "evalguidancetitle"),
                                        div(
                                          ul(
-                                           li(strong("I'm getting a value error: "), "You may have set negative parameters for a multiplicative permutation. If you are using a multiplicative permutation, the parameters must be greater than 0; values of less than 1 reference a lower than reported value."),
-                                           li(strong("I'm getting a net evaluated value of zero: "), "If you have a multiplicative parameter that has value 0, the final result is 0. If the reported and evaluated parameter impacts are the same, the parameter value should be 1. The same will occur if either the evaluated NTG or reported NTG are zero."),
-                                           li(strong("I'm getting huge values: "), "You may have identified multiplicative when you need additive permutation. Additive parameters are the values that you would add or subtract from the Gross or Net Reported values to get to the Evaluated values."),
-                                           li(strong("The page is all disorganized: "), "We may have a browser issue. This application was tested on Chrome. There are known issues with bootstrap renders on Safari and Internet Explorer. Can you try again with another browser?"),
-                                           li(strong("I have more than 6 parameters, how can I get a permutation: "), "Because of the time it takes to permute more than 6 parameters (this becomes more than 8 parameters when we consider a hybrid permutation), this application does not include it. You can download the evalwaterfallr package from Github (see link in footer) and work from there. If you have many parameters, you may need to modify the wParamPermute() function and ensure that you are running multiple cores."),
-                                           li(strong("I have another question: "), "Please submit an issue on the Github page for the evalwaterfallr package. We will try to help you as soon as practical.")
+                                           li(class="myblankspace",strong("I'm getting a value error: "), "You may have set negative parameters for a multiplicative permutation. If you are using a multiplicative permutation, the parameters must be greater than 0; values of less than 1 reference a lower than reported value."),
+                                           li(class="myblankspace",strong("I'm getting a net evaluated value of zero: "), "If you have a multiplicative parameter that has value 0, the final result is 0. If the reported and evaluated parameter impacts are the same, the parameter value should be 1. The same will occur if either the evaluated NTG or reported NTG are zero."),
+                                            li(class="myblankspace",strong("The Date Modified of my downloaded tables and plots does not match my timezone: "), "The downloaded files have a timestamp of GMT by default."),
+                                           li(class="myblankspace",strong("I'm getting huge values: "), "You may have identified multiplicative when you need additive permutation. Additive parameters are the values that you would add or subtract from the Gross or Net Reported values to get to the Evaluated values."),
+                                           li(class="myblankspace",strong("The page is all disorganized: "), "We may have a browser issue. This application was tested on Chrome. There are known issues with bootstrap renders on Safari and Internet Explorer. Can you try again with another browser?"),
+                                           li(class="myblankspace",strong("I have more than 6 parameters, how can I get a permutation: "), "Because of the time it takes to permute more than 6 parameters (this becomes more than 8 parameters when we consider a hybrid permutation), this application does not include it. You can download the evalwaterfallr package from Github (see link in footer) and work from there. If you have many parameters, you may need to modify the wParamPermute() function and ensure that you are running multiple cores."),
+                                           li(class="myblankspace",strong("I have another question: "), "Please submit an issue on the Github page for the evalwaterfallr package. We will try to help you as soon as practical.")
                                          ),
                                          class = "evalguidancetext")
                                        )
                                        }) # end with tags
                                ), # end FAQs
-                             
-                             #                        
-# Here is the start of the credits
-#
-                                hr(),
-                                fluidRow(
-                                  column(3,
-                                         img(src='emilogo.jpg', align = "right",height=140,width=200),
-                                         img(src='https://www.pge.com/pge_global/common/images/pge-spot-full-rgb-pos-lg.png',
-                                             align = "right", style = "margin-right: 40px", height = 100, width = 100)
-                                  ),
-                                  column(9,
-                                         p("This application was developed by ", a("EMI Consulting", href="http://emiconsulting.com"), "in collaboration with PG&E.",em("If you use this application for your evaluation efforts, please give us credit, like so: 'This table/plot was produced with the evalwaterfallr package developed by EMI Consulting and PG&E.'")),
-                                         p("For full reference, please see the ", a("evalwaterfallr package on GitHub", href="https://github.com/EMIjess/evalwaterfallr.git")), 
-                                         p("For more information on the motivation for this package, see Kasman, Robert, Adam Scheer, Rachel Sackman, Rafael Friedmann, and Janice Berman. 2015. 'Development of Order-Independent Waterfall Graphics to Enable Comprehensive Understanding of Impact Evaluation Results.' Proceedings of the 2015 International Energy Program Evaluation Conference", a("at the IEPEC proceedings website.", href="http://www.iepec.org/wp-content/uploads/2015/papers/022.pdf")),
-                                         p("A more recent whitepaper includes the additive parameters, see Kasman, Robert and Adam Scheer. 2017.'Whitepaper: Development of Order-Independent Waterfall Graphics to Enable Comprehensive Understanding of Impact Evaluation Results.' ", a("Available for review at CPUC's Energy Data Web.", href="http://www.energydataweb.com/cpuc/deliverableView.aspx?did=1632&uid=0&cid=&tid="))
-                                  )
-                                ) # end of credits
+          div(class="myblankspace",            
+          source('footer_credits.R', local=TRUE)$value)
 
                     ) # End of Help TabPanel
            ) # end of NavbarPage
