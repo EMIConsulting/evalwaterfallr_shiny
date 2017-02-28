@@ -7,12 +7,23 @@ library(markdown)
 
 navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
            tabPanel("Overview",
+      tags$head(tags$script(HTML('
+        var fakeClick = function(tabName) {
+          var dropdownList = document.getElementsByTagName("a");
+          for (var i = 0; i < dropdownList.length; i++) {
+            var link = dropdownList[i];
+            if(link.getAttribute("data-value") == tabName) {
+              link.click();
+            };
+          }
+        };
+      '))),
                     fluidPage(
                               fluidRow(
                                 h2("Overview"),
                                 p("This application creates permuted waterfall tables and plots for viewing impact evaluation results, specifically with energy efficiency savings programs in mind. This overview briefly describes the types of evaluation data considered for this application, describes the permutations, shows example output, and describes how to use the application for your data."),
-                                p("If you already know what you are doing here, skip straight to the Data tab and start entering data.")
-                              ),
+                                p("If you already know what you are doing here, skip straight to the Data tab and start entering data.",
+                              shiny::actionButton(inputId = "o1",label="Data", icon = icon("tasks", lib="glyphicon"), onclick = "fakeClick('Data')"))),
                               fluidRow(
                                 h2("Types of Evaluation Data Considered"),
                                 p("There are two kinds of evaluation data considered for this application: additive and multiplicative."),
@@ -152,7 +163,8 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                                 img(src='example_output2.png', style = "max-width:50%;max-height:49%;"),
                                 h3("Step 3: Download your Output"),
                                        p("When you are satisfied with your tables and plots, click the 'Download Tables' button to download a zip file of the three permutation tables (as .csv) for your data and/or the 'Download Plots' button to download a zip file of the three permutation waterfall plots (as .png) for your data."),
-                                h2("You are ready - Go enter some Data!")
+                                h2("You are ready - Go enter some Data!",
+                                shiny::actionButton(inputId = "o2", label="Data", icon = icon("tasks", lib="glyphicon"), onclick = "fakeClick('Data')"))
                               ) # end How to Use
                               )     
                     ), #end of overview tab
@@ -163,8 +175,21 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
 #
 ###########
                     tabPanel("Data",icon = icon("tasks", lib="glyphicon"),
+      tags$head(tags$script(HTML('
+        var fakeClick = function(tabName) {
+          var dropdownList = document.getElementsByTagName("a");
+          for (var i = 0; i < dropdownList.length; i++) {
+            var link = dropdownList[i];
+            if(link.getAttribute("data-value") == tabName) {
+              link.click();
+            };
+          }
+        };
+      '))),
+                             
                         fluidPage(
-                          p("Enter your Data on this Page, then go to the Output tab."),
+                          p("Enter your Data on this Page, then go to look at your Output.",
+                            shiny::actionButton(inputId = "d1", label="Output", icon = icon("object-align-top", lib="glyphicon"), onclick = "fakeClick('Output')")),
 # data start by choose Additive or Multiplicative
                                 fluidRow( # start with Add/Mult
                                   div(class = "evalguidancebox",
@@ -261,13 +286,32 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
 #
 ###########
                     tabPanel("Output", icon = icon("object-align-top", lib="glyphicon"),
-                             fluidPage(div("When you finish entering or making adjustments to data,  ",
-                                       actionButton("button","Update Tables & Plots")),
-                                       p("You can make further changes to the data and try again (verify the 'Given' column matches what you expect), or you can download all three tables and/or plots: "),
+                             fluidPage(
+                               fluidRow(
+                                 div(h4("When you finish entering or making adjustments to data or appearance,  ",
+                                       actionButton("button","Update Tables & Plots")))),
+                                       
+                               fluidRow(h4("Minor adjustments to the plot appearance can be made here:"),
+                                 column(6, h4("Change the Axis Titles")), column(6, h4("Change the Bar Colors"))),
+                               fluidRow(
+                                 column(3,textInput("xaxisl","X axis Title","")),
+                                 column(3,textInput("yaxisl","Y axis Title","")),
+                                 column(3,selectInput("color1","Decrease Color:",
+                                                    c("red" = "#CC3300",
+                                                      "l. blue" = "lightblue3",
+                                                      "green" = "darkolivegreen3",
+                                                      "orange" = "darkorange1"), selected="#CC3300")),
+                                 column(3, selectInput("color2","Increase Color:",
+                                                    c("green" = "#009900",
+                                                      "d. blue" = "navy",
+                                                      "brown" = "tan4",
+                                                      "purple" = "purple3"), selected="#009900"))
+                                 ),
+                               div(h4("When you are happy with the output, you can download all three tables and/or plots: ",
                                        downloadButton('downloadDataTab', 'Download Tables'),
-                                       downloadButton('downloadDataFig', 'Download Plots'),
-                                       #tableOutput("testtab"),
-                                       #tableOutput("testtab2"),
+                                       downloadButton('downloadDataFig', 'Download Plots')
+                                 )),
+                               fluidRow(
                                        verticalLayout( 
                                          div(class = "evalguidancebox",
                                           p(class = "evalguidancetitle", "Gross Permutation Table and Plot"),
@@ -287,7 +331,7 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                                          tableOutput("hybrid_tab"), 
                                          plotOutput("myPloth")))))
                                        )
-                             )
+                             ))
 
                     ), # end of output
 

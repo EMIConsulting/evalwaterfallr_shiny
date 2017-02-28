@@ -32,6 +32,9 @@ shinyServer(function(input, output, session) {
     m <- ifelse(is.null(input$nparams),1, input$nparams)
   })
   myaddm <- reactive({ # is it additive or multiplicative?
+        validate(
+    need(input$add_mult !="", "Please put in the details under Data")
+    )
     #  if (input$submit > 0) {
      if(input$add_mult == "Additive"){
        type <- "add"
@@ -73,6 +76,7 @@ shinyServer(function(input, output, session) {
 ################ 
   
   mytables <- eventReactive(input$button, {
+
     library(evalwaterfallr)
     type <- myaddm()
     mygiven <- mygiven()
@@ -132,21 +136,22 @@ shinyServer(function(input, output, session) {
   
   
   createPlot <- eventReactive(input$button, {
+
     library(evalwaterfallr)
     mypallette <- mypallette() # user-defined or default
     myaxisl <- myaxisl() # user-defined or default
     gwp <- waterfallPlot(mytables()[[2]],
-      #palette = mypallette,
+      palette = mypallette,
       xlab = myaxisl[1],
       ylab = myaxisl[2]#,
     ) 
     nwp <- waterfallPlot(mytables()[[3]],
-      #palette = mypallette,
+      palette = mypallette,
       xlab = myaxisl[1],
       ylab = myaxisl[2]#,
     ) 
     hwp <- waterfallPlot(mytables()[[4]],
-      #palette = mypallette,
+      palette = mypallette,
       xlab = myaxisl[1],
       ylab = myaxisl[2]#,
     ) 
