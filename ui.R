@@ -288,7 +288,7 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                     tabPanel("Output", icon = icon("object-align-top", lib="glyphicon"),
                              fluidPage(
                                fluidRow(
-                                 div(h4("When you finish entering or making adjustments to data or appearance,  ",
+                                 div(h4("When you finish entering or making adjustments to data or appearance, rerun the tables and plots: ",
                                        actionButton("button","Update Tables & Plots")))),
                                        
                                fluidRow(h4("Minor adjustments to the plot appearance can be made here:"),
