@@ -21,7 +21,7 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                     fluidPage(
                               fluidRow(
                                 h2("Overview"),
-                                p("This application creates permuted waterfall tables and plots for viewing impact evaluation results, specifically with energy efficiency savings programs in mind. This overview briefly describes the types of evaluation data considered for this application, describes the permutations, shows example output, and describes how to use the application for your data."),
+                                p("This application creates waterfall tables and plots with order-independent steps for viewing energy efficiency impact evaluation results. This overview briefly describes the types of evaluation data considered for this application, describes the underlying calculations, shows example output, and describes how to use the application for your data."),
                                 p("If you already know what you are doing here, skip straight to the Data tab and start entering data.",
                               shiny::actionButton(inputId = "o1",label="Data", icon = icon("tasks", lib="glyphicon"), onclick = "fakeClick('Data')"))),
                               fluidRow(
@@ -34,8 +34,8 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                                          class = "evalguidancetitle"),
                                        div(
                                          ul(
-                                           li("Parameters that are not dependent upon each other."),
-                                           li("Parameters that represent multiple programs in a portfolio, such as Lighting and Pumps.")
+                                           li("Parameters are not interdependent."),
+                                           li("Parameters that represent multiple programs in a portfolio, such as Lighting, HVAC, and Appliances.")
                                          ),
                                          class = "evalguidancetext")
                                        )
@@ -48,8 +48,8 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                                          class = "evalguidancetitle"),
                                        div(
                                          ul(
-                                           li("Parameters that are dependent upon each other."),
-                                           li("Parameters that represent use for a single program, such as Hours of Use (HOU) and Installation Rate (ISR).")
+                                           li("Dimensionless factors that represent the ratio of ex post to ex ante engineering parameters that are used to calculate savings, such as Hours of Use and Installation Rate."),
+                                           li("The Gross Realization Rate (GRR) is calculated by multiplying these factors.")
                                          ),
                                          class = "evalguidancetext")
                                        )
@@ -57,56 +57,38 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                                 ) # end multiplicative column
                               ),  # end types of eval parameters considered
                               fluidRow(
-                                h2("Permutations"),
-                                p("There are three kinds of permutations calculated by this application: Gross, Net, and Hybrid. The functional form of the permutation varies depending on whether the parameters are additive or multiplicative. However, the focus of each permutation is consistent. Please note that this application can handle up to 6 parameters. If you have more than 6 parameters, please download the evalwaterfallr package and run the analysis on your local machine."),
+                                h2("Waterfall Graphics"),
+                                p("There are three kinds of waterfall graphics calculated by this application: Gross, Net, and Hybrid. The functional form of the calculation varies depending on whether the parameters are additive or multiplicative. These waterfalls all contain order independent steps. The permutation computational procedure in Kasman et al. is the basis for ensuring order-independence. Please note that this application can handle up to 6 parameters. For problems with more than 6 parameters, one can download the evalwaterfallr package and run the analysis on your local machine."),
                                 column(width = 4,
                                        withTags({div(class = "evalguidancebox",
-                                       p("Gross Permutation", class = "evalguidancetitle"),
-                                       div(
-                                         ul(
-                                           li("Focus is on the gross realization rate."),
-                                           li("Permutes the mulitplicative parameters with each other."),
-                                           li("There is no permutation for additive parameters.")
-                                         ),
-                                         class = "evalguidancetext")
-                                       )
-                                       }) # end with tags
+                                       p("Gross Waterfall", class = "evalguidancetitle"),
+                                       div(class = "evalguidancetext",
+                                        "Gives the ex ante/ex post discrepancies in the gross domain, showing the path from ex ante gross to ex post gross. Subsequent application of the ex post net-to-gross yields ex post net.")
+                                       )}) # end with tags
                                 ), # end Gross column
                                 column(width = 4,
                                        withTags({div(class = "evalguidancebox",
-                                       p("Net Permutation", class = "evalguidancetitle"),
-                                       div(
-                                         ul(
-                                           li("Focus is from the net reported to the net evaluated savings, or the net realization rate."),
-                                           li("Permutes the multiplicative parameters with each other and the ratio of the NTG evaluated to the NTG reported."),
-                                           li("Permutes the additive parameters with the ratio of the NTG evaluated to the NTG reported.")
-                                         ),
-                                         class = "evalguidancetext")
-                                       )
-                                       }) # end with tags
+                                       p("Net Waterfall", class = "evalguidancetitle"),
+                                       div(class = "evalguidancetext",
+                                           "Applies ex ante net-to-gross to convert ex ante gross to ex ante net savings. The path from ex ante net to ex post net then includes the impact parameter adjustments and the ratio of ex post to ex ante net-to-gross, or the net-to-gross realization rate")
+                                       )}) # end with tags
                                 ), # end Net column
                                 column(width = 4,
                                        withTags({div(class = "evalguidancebox",
-                                       p("Hybrid Permutation", class = "evalguidancetitle"),
-                                       div(
-                                         ul(
-                                           li("Focus is from the gross reported to the net evaluated savings, or the overall realization rate."),
-                                           li("Permutes the multiplicative parameters with each other, the NTG reported, and the ratio of the NTG evaluated to the NTG reported."),
-                                           li("Permutes the additive parameters withthe NTG reported and the ratio of the NTG evaluated to the NTG reported.")
-                                         ),
-                                         class = "evalguidancetext")
-                                       )
-                                       }) # end with tags
+                                       p("Hybrid Waterfall", class = "evalguidancetitle"),
+                                       div(class = "evalguidancetext",
+                                           "Connects ex ante gross directly to ex post net via the impact parameter adjustments along with the ex ante net-to-gross and the net-to-gross realization rate. No ex post gross or ex ante net ‘stopping points’ are computed. For readers most interested in the ex ante/ex post discrepancies from ex ante gross to ex post net, the Hybrid waterfall provides the most accurate picture.")
+                                       )}) # end with tags
                                 ) # end Hybrid column
                               ), # end Permutations
 # begin examples in overview                              
                               fluidRow(
                                 h2("Example Output"),
-                                p("The application outputs both permuted tables and the related waterfall plots. Here, we show examples of the output for arbitrary data.")
+                                p("The application outputs both tables of savings adjustments and the corresponding waterfall plots. Here, we show examples of the output for arbitrary data.")
                               ),
                               fluidRow(
                                 h3("Additive Example"),
-                                p("Let's assume we have three programs, A, B, and C with gross reported savings of 100 arbtrary units, an overall reported Net to Gross (NTG) of 0.8, and an evaluated NTG of 0.6. We input these data into the evalwaterfallr, and we get the waterfall plots of gross, net. and hybrid permutations shown below. The theory and equations are in the supporting papers. Here, we just care that the outputs (and their possible interpretations) are different based on the order in which we go from the gross reported savings to the net evaluated savings." ),
+                                p("Assume ex ante gross reported savings are100 (arbitrary units). Three additive adjustments, A, B, and C link ex ante gross to ex post gross. The ex ante Net to Gross (NTG) is 0.8, and an ex post NTG is 0.6. We input these data into the evalwaterfallr, and the order-independent gross, net and hybrid waterfall graphics as shown below." ),
                                 column(4,
                                        #DT::dataTableOutput("add_gross_tab")
                                        withTags({div(class = "evalguidancebox",
@@ -128,7 +110,7 @@ navbarPage(theme = "bootstrap.css", "Waterfall for Evaluation",
                               ), # end additive example
                                 fluidRow(
                                 h3("Multiplicative Example"),
-                                p("Let's assume we have results from a lighting program with three multiplicative parameters (Hours of Use (HOU), delta Watts, and Installation Rate (ISR)) with gross reported savings of 100 arbtrary units, an overall reported Net to Gross (NTG) of 0.65, and an evaluated NTG of 0.85. We input these data into the evalwaterfallr, and we get the waterfall plots of gross, net. and hybrid permutations shown below. The theory and equations are in the supporting papers. Here, we just care that the outputs (and their possible interpretations) are different based on the order in which we go from the gross reported savings to the net evaluated savings." ),
+                                p("Again assume ex ante gross is 100. Three multiplicative parameters (Hours of Use (HOU), delta Watts, and Installation Rate (ISR)) are used to calculate savings. The ex post to ex ante ratio of these parameters are multiplicative adjustments that connect ex ante gross to ex post  gross. The ex ante Net to Gross (NTG) is 0.65, and ex post NTG is 0.85. Upon inputting these data into the evalwaterfallr, the following order-independent waterfall plots are generated." ),
                                 column(4,
                                        #DT::dataTableOutput("add_gross_tab")
                                        withTags({div(class = "evalguidancebox",
